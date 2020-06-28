@@ -101,7 +101,7 @@ def get_fitness(chromosome):
 
 
     sum_reward = 0
-    for step_counter in range(550):        
+    for step_counter in range(50):        
         t = step_counter * chromosome[1]
         a1 = math.sin(t * chromosome[0]) * (chromosome[2] + chromosome[3])
         a2 = math.sin(t * chromosome[0] + math.pi) * (chromosome[2] - chromosome[3])
@@ -312,11 +312,11 @@ def main():
     NUM_ITEMS = 5        # numero de items
 
     #POP_SIZE = 50
-    MIN_POP_SIZE = 30
-    MAX_POP_SIZE = 30
+    MIN_POP_SIZE = 10
+    MAX_POP_SIZE = 10
     CHROMOSOME_SIZE = NUM_ITEMS
-    GENERATIONS = 80   # numero de generaciones
-    PMUT = 0.55         # tasa de mutacion
+    GENERATIONS = 20   # numero de generaciones
+    PMUT = 0.35         # tasa de mutacion
 
     
 
