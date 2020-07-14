@@ -286,6 +286,7 @@ def main():
     #PMUT = 0.05        # tasa de mutacion
 
     PMUTS = [0.01, 0.05, 0.1, 0.3, 0.5, 0.7, 1]
+    indx = 1
 
     for PMUT in PMUTS:
         POP_SIZE = 30       # numero de individuos
@@ -315,10 +316,11 @@ def main():
                                           selection_survivors_method=S_SELECTION)
     
         plt.plot(bestfitness)
-        plt.savefig('AG-Monoobjetivo-'+CROSSOVER+'-'+MUTATION+'-'+P_SELECTION+'-'+S_SELECTION+'.png')
+        plt.savefig(str(indx) + 'AG-Monoobjetivo-'+CROSSOVER+'-'+MUTATION+'-'+P_SELECTION+'-'+S_SELECTION+'.png')
         #plt.show()
         print("Población: {}\tGeneraciones: {}\tTasa de mutacion: {}\n\nCROSSOVER: {}\nMUTATION: {}\nP_SELECTION: {}\nS_SELECTION: {}".format(POP_SIZE,GENERATIONS,PMUT,CROSSOVER,MUTATION,P_SELECTION,S_SELECTION))
         print(best_ind.chromosome)
+        indx += 1
 
 if __name__ == '__main__':
   main()
