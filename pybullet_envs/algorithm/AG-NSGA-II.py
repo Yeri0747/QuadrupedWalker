@@ -1,14 +1,12 @@
 import numpy as np
 import math
-from random import shuffle, random, sample, randint, randrange, uniform, choice
+from random import shuffle, random, sample, randint, randrange, uniform, choice, seed
 from copy import deepcopy
 from pybullet_envs.bullet import minitaur_gym_env
 from pybullet_envs.bullet import minitaur_env_randomizer
 import matplotlib.pyplot as plt
 
 class Individual:
-    """ Implementa el individuo del AG. Un individuo tiene un cromosoma que es una lista de NUM_ITEMS elementos (genes),
-       cada gen i puede asumir dos posibles alelos: 0 o 1 (no incluir/incluir en la mochila el item i del pool) """
 
     def __init__(self, chromosome):  # el constructor recibe un cromosoma
         self.chromosome = chromosome[:]  
@@ -33,8 +31,6 @@ class Individual:
             else:
                 chromosome1.append(other.chromosome[i])
                 chromosome2.append(self.chromosome[i])
-        chromosome1[3]=choice([0,0.1,-0.1])
-        chromosome2[3]=choice([0,0.1,-0.1])
         ind1 = Individual(chromosome1)
         ind2 = Individual(chromosome2)
         
@@ -47,7 +43,7 @@ class Individual:
         if mutGene == 3:
             new_chromosome[mutGene]=choice([0,0.1,-0.1])
         elif mutGene == 0:
-            new_chromosome[mutGene] = (uniform(0,50))
+            new_chromosome[mutGene] = uniform(0,100)
         elif mutGene == 2 or mutGene ==4:
                 valor = random()
                 if valor > 0:
@@ -64,7 +60,7 @@ def init_population(pop_size, chromosome_size):
     population = []
     for i in range(pop_size):
         new_chromosome = []
-        for i in range(5):
+        for i in range(chromosome_size):
             if i==3:
                 new_chromosome.append(choice([0.1,0,-0.1]))
             elif i==0:
@@ -77,19 +73,17 @@ def init_population(pop_size, chromosome_size):
                     new_chromosome.append(valor+0.1)
             else:
                 new_chromosome.append(random())
-            #np.random.shuffle(new_chromosome)
             
         population.append( Individual(new_chromosome) )
     return population   
 
-def get_fitness(chromosome):
+def get_fitness(chromosome, steps):
     
     # speed = chromosome[0]
-    # t = chromosome[1]
+    # time_step = chromosome[1]
     # amplitude1 = chromosome[2]
     # steering_amplitude = chromosome[3]
     # amplitufe2 = chromosome[4]
-    # time_step = chromosome[5]
     
     randomizer = (minitaur_env_randomizer.MinitaurEnvRandomizer())
     environment = minitaur_gym_env.MinitaurBulletEnv(render=False,
@@ -101,7 +95,7 @@ def get_fitness(chromosome):
 
 
     sum_reward = 0
-    for step_counter in range(50):        
+    for step_counter in range(steps):        
         t = step_counter * chromosome[1]
         a1 = math.sin(t * chromosome[0]) * (chromosome[2] + chromosome[3])
         a2 = math.sin(t * chromosome[0] + math.pi) * (chromosome[2] - chromosome[3])
@@ -111,6 +105,7 @@ def get_fitness(chromosome):
         _, reward, done, _ = environment.step(action)
         sum_reward += reward
         if done:
+            sum_reward += 5   #castigo por caerse
             break        
     environment.reset()
     fitness = np.zeros(2) # objetivos
@@ -119,13 +114,13 @@ def get_fitness(chromosome):
     return fitness
 
 
-def evaluate_population(population):
+def evaluate_population(population, steps):
     """ Evalua una poblacion de individuos con la funcion get_fitness """
     pop_size = len(population)
 
     for i in range(pop_size):
         if population[i].fitness == -1:    # evalua solo si el individuo no esta evaluado
-            population[i].fitness = get_fitness(population[i].chromosome)
+            population[i].fitness = get_fitness(population[i].chromosome, steps)
 
 def build_offspring_population(population, crossover, mutation, pmut):     
     """ Construye una poblacion hija con los operadores de cruzamiento y mutacion pasados
@@ -174,7 +169,7 @@ def get_crowding_distances(fitnesses):
     # crea matriz crowding. Filas representan individuos, columnas representan objectives
     crowding_matrix = np.zeros((pop_size, num_objectives))
 
-    # normalisa los fitnesses entre 0 y 1 (ptp es max - min)
+    # normaliza los fitnesses entre 0 y 1 (ptp es max - min)
     normalized_fitnesses = (fitnesses - fitnesses.min(0)) / fitnesses.ptp(0)
 
     for col in range(num_objectives):   # Por cada objective
@@ -311,18 +306,18 @@ def main():
 
     NUM_ITEMS = 5        # numero de items
 
-    #POP_SIZE = 50
-    MIN_POP_SIZE = 10
-    MAX_POP_SIZE = 10
-    CHROMOSOME_SIZE = NUM_ITEMS
-    GENERATIONS = 20   # numero de generaciones
-    PMUT = 0.35         # tasa de mutacion
 
+    MIN_POP_SIZE = 35
+    MAX_POP_SIZE = 35
+    CHROMOSOME_SIZE = NUM_ITEMS
+    GENERATIONS = 80   # numero de generaciones
+    PMUT = 0.6         # tasa de mutacion
+    STEPS = 500 #pasos en el entorno
     
 
     P = init_population( MAX_POP_SIZE, CHROMOSOME_SIZE )   # Crea  una poblacion inicial
     #  evalua la poblacion inicial
-    evaluate_population(P)
+    evaluate_population(P, STEPS)
 
     ## CODIGO PRINCIPAL DEL  ALGORITMO GENETICO  NSGA-II
 
@@ -334,7 +329,7 @@ def main():
         
         ## genera y evalua la poblacion hija    
         Q = build_offspring_population(P, "uniform", "flip", PMUT)
-        evaluate_population(Q)
+        evaluate_population(Q, STEPS)
         
         ## une la poblacion padre y la poblacion hija
         P.extend(Q) 
