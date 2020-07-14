@@ -284,20 +284,36 @@ def genetic_algorithm(population, ngen=100, pmut=0.1,
 
 def main():
     POP_SIZE = 5       # numero de individuos
-    GENERATIONS = 10   # numero de generaciones
+    GENERATIONS = 5   # numero de generaciones
     PMUT = 0.1         # tasa de mutacion
+
+    CROSSOVER = "uniform"
+    #CROSSOVER = "onepoint"
+
+    MUTATION = "flip"
+    #MUTATION = "inversion"
+
+    P_SELECTION = "roulette"
+    #P_SELECTION = "tournament"
+
+    S_SELECTION = "ranking"
+    #S_SELECTION = "steady"
+
 
     ## Inicializa una poblacion inicial de forma aleatoria
     population = init_population(POP_SIZE, 5)
 
     # Evolue la poblacion con el algoritmo genetico (cruzamiento 'onepoint', )
     best_ind, bestfitness = genetic_algorithm(population, GENERATIONS, PMUT, 
-                                          crossover="uniform", mutation="flip", 
-                                          selection_parents_method="roulette",
-                                          selection_survivors_method="ranking")
+                                          crossover=CROSSOVER,
+                                          mutation=MUTATION, 
+                                          selection_parents_method=P_SELECTION,
+                                          selection_survivors_method=S_SELECTION)
     
     plt.plot(bestfitness)
-    plt.show()
+    plt.savefig('AG-Monoobjetivo-'+CROSSOVER+'-'+MUTATION+'-'+P_SELECTION+'-'+S_SELECTION+'.png')
+    #plt.show()
+    print("Población: {}\tGeneraciones: {}\tTasa de mutacion: {}\n\nCROSSOVER: {}\nMUTATION: {}\nP_SELECTION: {}\nS_SELECTION: {}".format(POP_SIZE,GENERATIONS,PMUT,CROSSOVER,MUTATION,P_SELECTION,S_SELECTION))
     print(best_ind.chromosome)
 
 if __name__ == '__main__':
