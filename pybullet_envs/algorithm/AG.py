@@ -112,7 +112,7 @@ def get_fitness(chromosome):
 
 
     sum_reward = 0
-    for step_counter in range(50):        
+    for step_counter in range(500):        
         t = step_counter * chromosome[1]
         a1 = math.sin(t * chromosome[0]) * (chromosome[2] + chromosome[3])
         a2 = math.sin(t * chromosome[0] + math.pi) * (chromosome[2] - chromosome[3])
@@ -283,38 +283,42 @@ def genetic_algorithm(population, ngen=100, pmut=0.1,
     return population[ibest[0]], bestfitness  # devuelve el mejor individuo y la lista de mejores fitness x gen
 
 def main():
-    POP_SIZE = 5       # numero de individuos
-    GENERATIONS = 5   # numero de generaciones
-    PMUT = 0.1         # tasa de mutacion
+    #PMUT = 0.05        # tasa de mutacion
 
-    CROSSOVER = "uniform"
-    #CROSSOVER = "onepoint"
+    PMUTS = [0.01, 0.05, 0.1, 0.3, 0.5, 0.7, 1]
 
-    MUTATION = "flip"
-    #MUTATION = "inversion"
+    for PMUT in PMUTS:
+        POP_SIZE = 30       # numero de individuos
+        GENERATIONS = 30   # numero de generaciones
 
-    P_SELECTION = "roulette"
-    #P_SELECTION = "tournament"
+        CROSSOVER = "uniform"
+        #CROSSOVER = "onepoint"
 
-    S_SELECTION = "ranking"
-    #S_SELECTION = "steady"
+        MUTATION = "flip"
+        #MUTATION = "inversion"
+
+        P_SELECTION = "roulette"
+        #P_SELECTION = "tournament"
+
+        S_SELECTION = "ranking"
+        #S_SELECTION = "steady"
 
 
-    ## Inicializa una poblacion inicial de forma aleatoria
-    population = init_population(POP_SIZE, 5)
+        ## Inicializa una poblacion inicial de forma aleatoria
+        population = init_population(POP_SIZE, 5)
 
-    # Evolue la poblacion con el algoritmo genetico (cruzamiento 'onepoint', )
-    best_ind, bestfitness = genetic_algorithm(population, GENERATIONS, PMUT, 
+        # Evolue la poblacion con el algoritmo genetico (cruzamiento 'onepoint', )
+        best_ind, bestfitness = genetic_algorithm(population, GENERATIONS, PMUT, 
                                           crossover=CROSSOVER,
                                           mutation=MUTATION, 
                                           selection_parents_method=P_SELECTION,
                                           selection_survivors_method=S_SELECTION)
     
-    plt.plot(bestfitness)
-    plt.savefig('AG-Monoobjetivo-'+CROSSOVER+'-'+MUTATION+'-'+P_SELECTION+'-'+S_SELECTION+'.png')
-    #plt.show()
-    print("Población: {}\tGeneraciones: {}\tTasa de mutacion: {}\n\nCROSSOVER: {}\nMUTATION: {}\nP_SELECTION: {}\nS_SELECTION: {}".format(POP_SIZE,GENERATIONS,PMUT,CROSSOVER,MUTATION,P_SELECTION,S_SELECTION))
-    print(best_ind.chromosome)
+        plt.plot(bestfitness)
+        plt.savefig('AG-Monoobjetivo-'+CROSSOVER+'-'+MUTATION+'-'+P_SELECTION+'-'+S_SELECTION+'.png')
+        #plt.show()
+        print("Población: {}\tGeneraciones: {}\tTasa de mutacion: {}\n\nCROSSOVER: {}\nMUTATION: {}\nP_SELECTION: {}\nS_SELECTION: {}".format(POP_SIZE,GENERATIONS,PMUT,CROSSOVER,MUTATION,P_SELECTION,S_SELECTION))
+        print(best_ind.chromosome)
 
 if __name__ == '__main__':
   main()
