@@ -43,10 +43,19 @@ class Individual:
         "Cambia aleatoriamente el alelo de un gen."
         new_chromosome = deepcopy(self.chromosome)
         mutGene = randrange(0,len(new_chromosome))   # escoge un gen para mutar
-        if new_chromosome[mutGene] == 0:
-            new_chromosome[mutGene] = 1
+        if mutGene == 3:
+            new_chromosome[mutGene]=choice([0,0.1,-0.1])
+        elif mutGene == 0:
+            new_chromosome[mutGene] = uniform(0,100)
+        elif mutGene == 2 or mutGene ==4:
+                valor = random()
+                if valor > 0:
+                    new_chromosome[mutGene] = (valor-0.1)
+                else:
+                    new_chromosome[mutGene] = (valor+0.1)
         else:
-            new_chromosome[mutGene] = 0
+            new_chromosome[mutGene] = random()
+        
         return Individual(new_chromosome)
 
     def mutation_inversion(self):
