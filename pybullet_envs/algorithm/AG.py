@@ -285,18 +285,17 @@ def genetic_algorithm(population, ngen=100, pmut=0.1,
 def main():
     #PMUT = 0.05        # tasa de mutacion
 
-    PMUTS = [0.01, 0.05, 0.1, 0.3, 0.5, 0.7, 1]
+    PMUTS = [0.05, 0.1, 0.3, 0.5, 0.7, 1]
     indx = 1
 
     for PMUT in PMUTS:
-        POP_SIZE = 30       # numero de individuos
-        GENERATIONS = 30   # numero de generaciones
+        POP_SIZE = 20       # numero de individuos
+        GENERATIONS = 25   # numero de generaciones
 
         CROSSOVER = "uniform"
         #CROSSOVER = "onepoint"
 
         MUTATION = "flip"
-        #MUTATION = "inversion"
 
         P_SELECTION = "roulette"
         #P_SELECTION = "tournament"
@@ -320,6 +319,7 @@ def main():
         #plt.show()
         print("Población: {}\tGeneraciones: {}\tTasa de mutacion: {}\n\nCROSSOVER: {}\nMUTATION: {}\nP_SELECTION: {}\nS_SELECTION: {}".format(POP_SIZE,GENERATIONS,PMUT,CROSSOVER,MUTATION,P_SELECTION,S_SELECTION))
         print(best_ind.chromosome)
+        print("===========================================================================================================\n\n")
         indx += 1
 
 if __name__ == '__main__':
