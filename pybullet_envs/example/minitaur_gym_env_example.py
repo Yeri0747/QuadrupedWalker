@@ -117,18 +117,18 @@ def SinePolicyExample():
                                                    env_randomizer=randomizer,
                                                    on_rack=False)
   sum_reward = 0
-  steps = 100 #20000
+  steps = 500 #20000
   amplitude_1_bound = 0.1
   amplitude_2_bound = 0.1
-  speed = 99.95830805709147 #96.03904323742279
+  speed = 95.76487704867183 #99.95830805709147 #96.03904323742279
 
   for step_counter in range(steps):
-    time_step = 0.3738710084245188 #0.7118871187955457
+    time_step = 0.5180280589663037 #0.3738710084245188 #0.7118871187955457
     t = step_counter * time_step
-    amplitude1 =  0.6704708050626745 #0.8313325863588368 #amplitude_1_bound
-    amplitude2 = 0.24525131201122005 #0.2804425976578887 #amplitude_2_bound   
+    amplitude1 =  0.7958106754045535 #0.6704708050626745 #0.8313325863588368 #amplitude_1_bound
+    amplitude2 = 0.5783009482997857 #0.24525131201122005 #0.2804425976578887 #amplitude_2_bound   
 
-    steering_amplitude = 0.1
+    steering_amplitude = 0
     # Applying asymmetrical sine gaits to different legs can steer the minitaur.
     a1 = math.sin(t * speed) * (amplitude1 + steering_amplitude)
     a2 = math.sin(t * speed + math.pi) * (amplitude1 - steering_amplitude)

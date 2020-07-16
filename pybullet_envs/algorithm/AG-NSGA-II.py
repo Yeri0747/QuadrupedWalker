@@ -304,59 +304,61 @@ def build_next_population(population, min_pop_size, max_pop_size):
 def main():
     ## Hiperparametros del algoritmo genetico
 
-    NUM_ITEMS = 5        # numero de items
+    # NUM_ITEMS = 5        # numero de items
 
 
-    MIN_POP_SIZE = 35
-    MAX_POP_SIZE = 35
-    CHROMOSOME_SIZE = NUM_ITEMS
-    GENERATIONS = 80   # numero de generaciones
-    PMUT = 0.6         # tasa de mutacion
-    STEPS = 500 #pasos en el entorno
+    # MIN_POP_SIZE = 35
+    # MAX_POP_SIZE = 35
+    # CHROMOSOME_SIZE = NUM_ITEMS
+    # GENERATIONS = 80   # numero de generaciones
+    # PMUT = 0.6         # tasa de mutacion
+    # STEPS = 500 #pasos en el entorno
     
 
-    P = init_population( MAX_POP_SIZE, CHROMOSOME_SIZE )   # Crea  una poblacion inicial
-    #  evalua la poblacion inicial
-    evaluate_population(P, STEPS)
+    # P = init_population( MAX_POP_SIZE, CHROMOSOME_SIZE )   # Crea  una poblacion inicial
+    # #  evalua la poblacion inicial
+    # evaluate_population(P, STEPS)
 
-    ## CODIGO PRINCIPAL DEL  ALGORITMO GENETICO  NSGA-II
+    # ## CODIGO PRINCIPAL DEL  ALGORITMO GENETICO  NSGA-II
 
-    ## Ejecuta los ciclos evolutivos 
-    for g in range(GENERATIONS):   # Por cada generacion
+    # ## Ejecuta los ciclos evolutivos 
+    # for g in range(GENERATIONS):   # Por cada generacion
         
-        if g %10 == 0:
-            print ('Generacion {} (de {}) '.format(g, GENERATIONS))
+    #     if g %10 == 0:
+    #         print ('Generacion {} (de {}) '.format(g, GENERATIONS))
         
-        ## genera y evalua la poblacion hija    
-        Q = build_offspring_population(P, "uniform", "flip", PMUT)
-        evaluate_population(Q, STEPS)
+    #     ## genera y evalua la poblacion hija    
+    #     Q = build_offspring_population(P, "uniform", "flip", PMUT)
+    #     evaluate_population(Q, STEPS)
         
-        ## une la poblacion padre y la poblacion hija
-        P.extend(Q) 
+    #     ## une la poblacion padre y la poblacion hija
+    #     P.extend(Q) 
         
-        ## Construye la poblacion de la siguiente generacion
-        P = build_next_population(P, MIN_POP_SIZE, MAX_POP_SIZE)
+    #     ## Construye la poblacion de la siguiente generacion
+    #     P = build_next_population(P, MIN_POP_SIZE, MAX_POP_SIZE)
 
-    # Obtiene la poblacion de la frontera de pareto final 
-    pareto_front_population = get_paretofront_population(P)
-    ## Plotea los individuos de la frontera de Pareto final
-    pop_size = len(pareto_front_population)
-    num_objectives = len(pareto_front_population[0].fitness)
+    # # Obtiene la poblacion de la frontera de pareto final 
+    # pareto_front_population = get_paretofront_population(P)
+    # ## Plotea los individuos de la frontera de Pareto final
+    # pop_size = len(pareto_front_population)
+    # num_objectives = len(pareto_front_population[0].fitness)
         
-    # extrae los fitness de la poblacion en la matriz fitnesses
-    fitnesses = np.zeros([pop_size, num_objectives])
-    for i in range(pop_size): fitnesses[i,:] = pareto_front_population[i].fitness
+    # # extrae los fitness de la poblacion en la matriz fitnesses
+    # fitnesses = np.zeros([pop_size, num_objectives])
+    # for i in range(pop_size): fitnesses[i,:] = pareto_front_population[i].fitness
 
-    x = fitnesses[:, 0]
-    y = fitnesses[:, 1]
+    # x = fitnesses[:, 0]
+    # y = fitnesses[:, 1]
     plt.xlabel('Objectivo A - Reward')
     plt.ylabel('Objectivo B - Velocidad')
+    x = [15.066970206117848, 13.395619092, 12.687453214889 ]
+    y = [96.03904323742279, 96.586578231, 99.654798541648]
     plt.scatter(x,y)
-    plt.savefig('pareto.png')
-    for i in range(len(pareto_front_population)):
-        a = pareto_front_population[i].chromosome
-        b = pareto_front_population[i].fitness         
-        print("Solucion", a, " - ", b)
+    plt.savefig('pareto2.png')
+    # for i in range(len(pareto_front_population)):
+    #     a = pareto_front_population[i].chromosome
+    #     b = pareto_front_population[i].fitness         
+    #     print("Solucion", a, " - ", b)
     plt.show()
 
 if __name__ == '__main__':
