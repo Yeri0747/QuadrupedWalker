@@ -14,7 +14,7 @@ pyglet==1.5.0
 pylint==2.5.3
 pyparsing==2.4.7
 python-dateutil==2.8.1
-scipy==1.5.1
+scipy==1.10.0
 six==1.15.0
 toml==0.10.1
 wrapt==1.12.1
